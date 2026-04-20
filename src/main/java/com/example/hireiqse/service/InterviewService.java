@@ -39,7 +39,7 @@ public class InterviewService {
                 .orElseThrow(() -> new RuntimeException(
                         "No score found for candidate " + candidateId +
                                 " and job " + jobId + ". Please score candidates first."));
-\
+
         Candidate candidate = candidateRepository.findById(candidateId)
                 .orElseThrow(() -> new RuntimeException("Candidate not found: " + candidateId));
 
