@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireIQ - Home</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .hero {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 34px 30px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            border-left: 6px solid var(--accent-primary);
+        }
+
+        .hero-kicker {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.14);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+            color: var(--text-primary);
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .workflow-title {
+            margin-bottom: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .step-card {
+            text-decoration: none;
+            color: inherit;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 22px 20px;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+            border-top: 4px solid var(--step-color, var(--accent-primary));
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--step-color, var(--accent-primary));
+            box-shadow: var(--shadow-md);
+        }
+
+        .home-grid .step-card:nth-child(1) { --step-color: #3b82f6; }
+        .home-grid .step-card:nth-child(2) { --step-color: #14b8a6; }
+        .home-grid .step-card:nth-child(3) { --step-color: #f59e0b; }
+        .home-grid .step-card:nth-child(4) { --step-color: #8b5cf6; }
+        .home-grid .step-card:nth-child(5) { --step-color: #ef4444; }
+        .home-grid .step-card:nth-child(6) { --step-color: #0ea5e9; }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            background: var(--step-color, var(--accent-primary));
+            margin-bottom: 10px;
+        }
+
+        .step-card i {
+            font-size: 19px;
+            color: var(--step-color, var(--accent-primary));
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .step-card h3 {
+            margin: 0 0 6px;
+            color: var(--text-primary);
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .step-meta {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .support-card {
+            border-left: 4px solid var(--accent-primary);
+            background: var(--bg-card);
+        }
+
+        .support-card h2 {
+            color: var(--text-primary);
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .support-card p {
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .btn-secondary i {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="page-content">
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-kicker">Hiring cockpit</span>
+            <h1>Welcome back, recruiting team</h1>
+            <p>
+                This is your day-to-day workspace. Follow the steps in order to keep every role organized,
+                score candidates consistently, and move the best profiles to interview without guesswork.
+            </p>
+        </div>
+    </section>
+
+    <h2 class="workflow-title">Hiring workflow</h2>
+    <div class="home-grid">
+        <a href="/job-input" class="step-card">
+            <div class="step-number">1</div>
+            <i class='bx bx-briefcase'></i>
+            <h3>Create role brief</h3>
+            <p>Define role title, team, must-have skills, and JD baseline.</p>
+            <span class="step-meta">Typical time: 5 min</span>
+        </a>
+        <a href="/upload" class="step-card">
+            <div class="step-number">2</div>
+            <i class='bx bx-cloud-upload'></i>
+            <h3>Upload resume batch</h3>
+            <p>Add candidate files in one batch and link them to the selected role.</p>
+            <span class="step-meta">Typical time: 3 min</span>
+        </a>
+        <a href="/rankings" class="step-card">
+            <div class="step-number">3</div>
+            <i class='bx bx-bar-chart-alt-2'></i>
+            <h3>Review ranked list</h3>
+            <p>Use fit score and confidence to shortlist interview-ready candidates.</p>
+            <span class="step-meta">Typical time: 8 min</span>
+        </a>
+        <a href="/comparison" class="step-card">
+            <div class="step-number">4</div>
+            <i class='bx bx-git-compare'></i>
+            <h3>Compare finalists</h3>
+            <p>Review top profiles side by side before panel discussion.</p>
+            <span class="step-meta">Typical time: 10 min</span>
+        </a>
+        <a href="/kanban" class="step-card">
+            <div class="step-number">5</div>
+            <i class='bx bx-columns'></i>
+            <h3>Move pipeline stages</h3>
+            <p>Track each candidate from screening to offer with clear stage ownership.</p>
+            <span class="step-meta">Live status</span>
+        </a>
+        <a href="/interview" class="step-card">
+            <div class="step-number">6</div>
+            <i class='bx bx-question-mark'></i>
+            <h3>Prepare interview round</h3>
+            <p>Generate role-aware interview questions for the shortlisted candidates.</p>
+            <span class="step-meta">Final prep</span>
+        </a>
+    </div>
+
+    <div class="card support-card">
+        <h2>Need a second opinion?</h2>
+        <p style="margin-bottom: 16px; color: var(--text-muted);">Use these tools for edge cases, interview prep, and JD quality checks.</p>
+        <div class="button-group">
+            <a class="btn btn-secondary" href="/chat"><i class='bx bx-message-dots'></i> Ask hiring assistant</a>
+            <a class="btn btn-secondary" href="/interview"><i class='bx bx-question-mark'></i> Build interview kit</a>
+            <a class="btn btn-secondary" href="/jd-analyzer"><i class='bx bx-analyse'></i> Check JD quality</a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/navbar.js"></script>
+</body>
+</html>
+

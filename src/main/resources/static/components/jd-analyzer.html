@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HireIQ - JD Analyzer</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <style>
+        .form-row { margin-bottom: 14px; }
+        .score-big { font-size: 48px; font-weight: 800; color: var(--text-primary); }
+        .subtle-label { font-size: 13px; color: var(--text-muted); }
+        .score-track { background: var(--bg-secondary); border-radius: 6px; height: 14px; width: 100%; border: 1px solid var(--border-color); }
+        .score-fill { background: var(--accent-primary); border-radius: 6px; height: 14px; width: 0; transition: width 0.5s; }
+        .issues-title { color: var(--accent-red); margin-bottom: 12px; }
+        .panel-title-muted { margin-bottom: 12px; color: var(--text-muted); }
+        .split-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+        .split-col { flex: 1; min-width: 280px; }
+        .copy-btn { background: var(--accent-green); padding: 6px 14px; font-size: 12px; }
+        .download-btn { background: #6b7280; padding: 6px 14px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-icon"><i class='bx bx-analyse'></i></div>
+        <div>
+            <span class="page-eyebrow">Content quality</span>
+            <h1>Job Description Analyzer</h1>
+            <p>Score your JD, highlight gaps, and generate a cleaner refined version.</p>
+        </div>
+    </div>
+
+    <!-- Input Panel -->
+    <div class="card">
+        <div class="form-row">
+            <label for="jobId">
+                Job <span style="color:#999;">(optional — link this analysis to a job)</span>
+            </label>
+            <select id="jobId" style="max-width:300px;">
+                <option value="">-- Select a job --</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="originalJd">
+                Paste your Job Description here
+            </label>
+            <textarea id="originalJd" rows="10" placeholder="We are looking for a Senior Software Engineer..."
+                      style="resize:vertical; font-family:Arial,sans-serif;"></textarea>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button onclick="analyzeJd()" id="analyzeBtn">Analyze & Refine</button>
+            <span id="analyzeMsg" class="section-muted"></span>
+        </div>
+    </div>
+
+    <!-- Quality Score Banner -->
+    <div id="scoreBanner" style="display:none;" class="card">
+        <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+            <div style="text-align:center;">
+                <div id="qualityScore" class="score-big">0</div>
+                <div class="subtle-label">Quality Score / 100</div>
+            </div>
+            <div style="flex:1;">
+                <div class="score-track">
+                    <div id="scoreBar" class="score-fill"></div>
+                </div>
+                <div id="improvementSummary"
+                     style="font-size:13px; color:var(--text-muted); margin-top:10px; font-style:italic;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issues Found -->
+    <div id="issuesPanel" style="display:none;" class="card">
+        <h2 class="issues-title">Issues Found</h2>
+        <div id="issuesList"></div>
+    </div>
+
+    <!-- Split Screen: Original vs Refined -->
+    <div id="splitPanel" style="display:none;">
+        <div class="split-grid">
+
+            <!-- Left: Original -->
+            <div class="split-col">
+                <div class="card">
+                    <h2 class="panel-title-muted">Original JD</h2>
+                    <div id="originalDisplay"
+                         style="white-space:pre-wrap; font-size:13px; color:#444;
+                                line-height:1.6; max-height:500px; overflow-y:auto;"></div>
+                </div>
+            </div>
+
+            <!-- Right: Refined -->
+            <div class="split-col">
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between;
+                                align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                        <h2 style="color: var(--accent-green);">Refined JD</h2>
+                        <div style="display:flex; gap:8px;">
+                            <button onclick="copyRefined()" class="copy-btn">
+                                Copy
+                            </button>
+                            <button onclick="downloadRefined()" class="download-btn">
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <label for="refinedJd" style="display:none;">Refined job description</label>
+                    <textarea id="refinedJd" rows="20"
+                              style="font-size:13px; resize:vertical;
+                                     font-family:Arial,sans-serif; line-height:1.6;"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/jd-analyzer.js"></script>
+</body>
+</html>

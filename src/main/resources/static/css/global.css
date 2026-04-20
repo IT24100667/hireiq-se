@@ -1,0 +1,546 @@
+/* static/css/global.css */
+/* Simple global styles for HireIQ. No framework needed. */
+/* All pages include this file. Do NOT put page-specific styles here. */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --accent-primary: #1e40af;
+    --accent-secondary: #1e3a8a;
+    --accent-blue: #3b82f6;
+    --accent-light-blue: #60a5fa;
+    --accent-sky: #0ea5e9;
+    --accent-orange: #f59e0b;
+    --text-primary: #0f172a;
+    --text-secondary: #1e293b;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --border-color: #d8e1ec;
+    --border-light: #e7edf5;
+    --bg-secondary: #f3f7fc;
+    --bg-input: #ffffff;
+    --surface-accent: rgba(37, 99, 235, 0.08);
+    --gradient-primary: #2563eb;
+    --gradient-secondary: #1d4ed8;
+    --gradient-teal: #0f766e;
+    --gradient-warm: #d97706;
+    --gradient-blue: #1d4ed8;
+    --gradient-hero: #0f172a;
+    --gradient-card: #ffffff;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 999px;
+    --shadow-sm: 0 1px 6px rgba(15, 23, 42, 0.07), 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 18px 44px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.06);
+    --shadow-glow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    --shadow-hover: 0 12px 32px rgba(30, 64, 175, 0.18);
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: #eaf0f7;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background var(--transition-normal), color var(--transition-normal);
+}
+
+/* ── Dark Mode ───────────────────────────────────────────── */
+html.light-mode {
+    --accent-primary: #1e40af;
+    --accent-secondary: #1e3a8a;
+    --accent-blue: #3b82f6;
+    --accent-light-blue: #60a5fa;
+    --accent-sky: #0ea5e9;
+    --accent-orange: #f59e0b;
+    --text-primary: #0f172a;
+    --text-secondary: #1e293b;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --border-color: #d8e1ec;
+    --border-light: #e7edf5;
+    --bg-secondary: #f3f7fc;
+    --bg-input: #ffffff;
+    --surface-accent: rgba(37, 99, 235, 0.08);
+    --gradient-primary: #2563eb;
+    --gradient-secondary: #1d4ed8;
+    --gradient-teal: #0f766e;
+    --gradient-warm: #d97706;
+    --gradient-blue: #1d4ed8;
+    --gradient-hero: #0f172a;
+    --gradient-card: #ffffff;
+}
+
+/* Dark mode (default) */
+html:not(.light-mode) {
+    --accent-primary: #3b82f6;
+    --accent-secondary: #2563eb;
+    --accent-blue: #60a5fa;
+    --accent-light-blue: #93c5fd;
+    --accent-sky: #38bdf8;
+    --accent-orange: #fbbf24;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent-green: #34d399;
+    --accent-red: #f87171;
+    --bg-card: #1f2937;
+    --bg-card-hover: #334155;
+    --border-color: #334155;
+    --border-light: #475569;
+    --bg-secondary: #111b2a;
+    --bg-input: #1e293b;
+    --surface-accent: rgba(96, 165, 250, 0.14);
+    --gradient-primary: #3b82f6;
+    --gradient-secondary: #60a5fa;
+    --gradient-teal: #14b8a6;
+    --gradient-warm: #f59e0b;
+    --gradient-blue: #60a5fa;
+    --gradient-hero: #0f172a;
+    --gradient-card: #1e293b;
+}
+
+html:not(.light-mode) body {
+    background: #0b1220;
+}
+
+/* ── Navbar ──────────────────────────────────────────────── */
+nav {
+    background: var(--bg-card);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+nav .brand {
+    color: var(--text-primary);
+    font-size: 22px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform var(--transition-fast);
+}
+
+nav .brand:hover {
+    transform: scale(1.02);
+}
+
+nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+nav a:hover {
+    color: var(--accent-primary);
+    background: var(--surface-accent);
+    transform: translateY(-1px);
+}
+
+nav a.active-link {
+    color: var(--accent-primary);
+    font-weight: 700;
+    background: var(--surface-accent);
+    box-shadow: none;
+}
+
+/* ── Page Layout ─────────────────────────────────────────── */
+.page-content {
+    width: 100%;
+    max-width: none;
+    margin: clamp(16px, 2.2vw, 30px) auto clamp(24px, 3vw, 40px);
+    padding: 0 clamp(14px, 2.6vw, 34px);
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+button {
+    padding: 12px 20px;
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    background: var(--accent-secondary);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background: var(--accent-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background: var(--accent-secondary);
+}
+
+.btn-secondary {
+    color: var(--accent-primary);
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-blue);
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-primary);
+    opacity: 0.55;
+    transition: opacity var(--transition-normal), height var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-color);
+}
+
+.card:hover::before {
+    opacity: 1;
+    height: 4px;
+}
+
+.card h2,
+.card h3 {
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    border-radius: 12px;
+    padding: 11px 13px;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-glow);
+    outline: none;
+}
+
+.field-error {
+    color: #b91c1c;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.input-invalid {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
+}
+
+.input-help {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* ── Status badges ───────────────────────────────────────── */
+.status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.processing { background: #fff3cd; color: #856404; }
+.status.ready      { background: #d4edda; color: #155724; }
+.status.failed     { background: #f8d7da; color: #721c24; }
+.status.scored     { background: #d1ecf1; color: #0c5460; }
+
+/* ── Messages ────────────────────────────────────────────── */
+.error-msg   { color: #c0392b; font-size: 14px; margin-top: 8px; }
+.success-msg { color: #27ae60; font-size: 14px; margin-top: 8px; }
+
+/* ── Shared Page Shell ──────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    padding: 20px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--accent-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.page-header .header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--accent-primary);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+
+.page-header h1 {
+    margin: 0 0 3px;
+    font-size: 28px;
+    color: var(--text-primary);
+}
+
+.page-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.page-eyebrow {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    background: var(--surface-accent);
+    margin-bottom: 7px;
+}
+
+.section-muted {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-accent);
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.table-shell {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-shell th,
+.table-shell td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.table-shell th {
+    color: var(--text-primary);
+    font-weight: 700;
+    background: var(--bg-secondary);
+}
+
+/* ── Responsive Foundations ─────────────────────────────── */
+@media (max-width: 1024px) {
+    nav {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    nav .brand {
+        font-size: 20px;
+    }
+
+    nav a {
+        font-size: 13px;
+        padding: 7px 10px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-content {
+        margin-top: 14px;
+        padding: 0 12px;
+    }
+
+    .page-header {
+        padding: 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .page-header .header-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .page-header h1,
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 17px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .btn,
+    button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    nav {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    nav a {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .page-header h1,
+    h1 {
+        font-size: 22px;
+    }
+
+    .table-shell th,
+    .table-shell td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
