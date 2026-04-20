@@ -42,7 +42,7 @@ public class CandidateScore {
     @Column(name = "status")           private String status;
     @Column(name = "scored_at")        private LocalDateTime scoredAt;
 
-    // ── Member 04 fields ───────────────────────────────────
+
     @Column(name = "company_type")   private String  companyType;
     @Column(name = "has_leadership") private Boolean hasLeadership;
     @Column(name = "industry")       private String  industry;
