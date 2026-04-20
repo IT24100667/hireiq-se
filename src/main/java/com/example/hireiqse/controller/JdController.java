@@ -15,14 +15,8 @@ public class JdController {
 
     @Autowired private JdService jdService;
 
-    /**
-     * Analyze and refine a job description.
-     * POST /api/jd/analyze
-     * Body: {
-     *   "originalJd": "We are looking for a developer...",
-     *   "jobId": 1   (optional)
-     * }
-     */
+    // Analyze and refine a job description
+    
     @PostMapping("/analyze")
     public ResponseEntity<?> analyzeJd(@RequestBody Map<String, Object> body) {
 
@@ -42,11 +36,6 @@ public class JdController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
-
-    /**
-     * Get past JD analyses for a job.
-     * GET /api/jd/history?jobId=1
-     */
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam Integer jobId) {
         try {

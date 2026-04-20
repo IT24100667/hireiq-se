@@ -15,14 +15,6 @@ public class InterviewController {
 
     @Autowired private InterviewService interviewService;
 
-    /**
-     * Generate interview questions for a candidate.
-     * POST /api/interview/generate
-     * Body: {
-     *   "candidateId": 1,
-     *   "jobId": 1
-     * }
-     */
     @PostMapping("/generate")
     public ResponseEntity<?> generateQuestions(@RequestBody Map<String, Object> body) {
 
@@ -44,10 +36,6 @@ public class InterviewController {
         }
     }
 
-    /**
-     * Get previously saved questions for a candidate.
-     * GET /api/interview/questions?candidateId=1&jobId=1
-     */
     @GetMapping("/questions")
     public ResponseEntity<?> getQuestions(
             @RequestParam Integer candidateId,
@@ -56,6 +44,19 @@ public class InterviewController {
             List<InterviewQuestionDTO> questions =
                     interviewService.getQuestions(candidateId, jobId);
             return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+    @DeleteMapping("/questions/{id}")
+    public ResponseEntity<?> deleteQuestion(@PathVariable Integer id) {
+        try {
+            interviewService.deleteQuestion(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404)
+                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", e.getMessage()));
