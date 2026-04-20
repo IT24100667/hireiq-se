@@ -114,4 +114,68 @@
             <p id="createMsg" style="font-size: 13px; margin-top: 10px;"></p>
         </div>
 
-    
+        <!-- Add API Provider form -->
+        <div class="card">
+            <span class="pill">API Management</span>
+            <h2 style="margin-bottom: 10px;">Add API Provider</h2>
+            <form class="inline-form" id="addProviderForm">
+                <div>
+                    <label for="providerName">Provider Name</label>
+                    <input id="providerName" placeholder="e.g. Gemini" required>
+                </div>
+                <div>
+                    <label for="providerKey">API Key</label>
+                    <input id="providerKey" type="password" placeholder="Paste key here" required>
+                </div>
+                <div>
+                    <label for="providerModel">Model Name</label>
+                    <input id="providerModel" placeholder="e.g. gemini-2.5-flash-lite-preview" required>
+                </div>
+                <button type="submit">Add</button>
+            </form>
+            <p id="providerMsg" style="font-size: 13px; margin-top: 10px;"></p>
+        </div>
+
+    </div>
+
+    <!-- ── Accounts Table ─────────────────────────────────────────────────── -->
+    <div class="card" style="margin-bottom: 18px;">
+        <h2 style="margin-bottom: 12px;">Accounts</h2>
+        <table class="table-shell user-table">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ── API Providers Table ────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 style="margin-bottom: 12px;">API Providers</h2>
+        <table class="table-shell api-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Model</th>
+                <th>API Key</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="providersTableBody">
+            <tr><td colspan="5" style="color:#9ca3af;">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/admin-dashboard.js"></script>
+</body>
+</html>
