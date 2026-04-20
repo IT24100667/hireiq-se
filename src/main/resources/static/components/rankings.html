@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireIQ - Rankings</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* ── Page header ─────────────────────────────────── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 12px;
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid #f59e0b;
+        }
+
+        .page-header .header-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            background: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+
+        .page-header h1 {
+            margin-bottom: 4px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .page-header p {
+            margin-bottom: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+
+        /* ── Analytics panel ─────────────────────────────── */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* Each stat box */
+        .analytics-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            padding: 14px 16px;
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .analytics-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Colored top strip on each stat card */
+        .analytics-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+
+        .analytics-item.blue   { background: rgba(59,130,246,0.10); border-color: rgba(59,130,246,0.25); }
+        .analytics-item.blue::before   { background: #3b82f6; }
+        .analytics-item.teal   { background: rgba(16,185,129,0.10); border-color: rgba(16,185,129,0.25); }
+        .analytics-item.teal::before   { background: #10b981; }
+        .analytics-item.warm   { background: rgba(245,158,11,0.10); border-color: rgba(245,158,11,0.25); }
+        .analytics-item.warm::before   { background: #f59e0b; }
+        .analytics-item.violet { background: rgba(139,92,246,0.10); border-color: rgba(139,92,246,0.25); }
+        .analytics-item.violet::before { background: #8b5cf6; }
+
+        .analytics-item .k {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .analytics-item .v {
+            font-size: 22px;
+            color: var(--text-primary);
+            font-weight: 800;
+            margin-top: 6px;
+            line-height: 1;
+        }
+
+        /* ── Fit bar (quartile overview) ─────────────────── */
+        .fit-overview {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            background: var(--bg-secondary);
+        }
+
+        .fit-bar {
+            display: flex;
+            width: 100%;
+            height: 14px;
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            background: var(--border-color);
+            margin-bottom: 10px;
+            gap: 2px; /* small gap between segments for clarity */
+        }
+
+        .fit-segment-strong { background: #10b981; }
+        .fit-segment-review { background: #f59e0b; }
+        .fit-segment-risk   { background: #ef4444; }
+
+        .fit-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        /* ── Score histogram ─────────────────────────────── */
+        .histogram {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            align-items: end;
+            min-height: 96px;
+            margin-bottom: 8px;
+        }
+
+        .hist-bar-wrap {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .hist-bar {
+            width: 100%;
+            min-height: 6px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        /* ── Shortlist chips ─────────────────────────────── */
+        .shortlist-chip {
+            display: inline-flex;
+            padding: 3px 9px;
+            margin: 3px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(59,130,246,0.15);
+            color: var(--accent-blue);
+        }
+
+        /* ── Score bar ───────────────────────────────────── */
+        .score-bar-bg {
+            background: var(--bg-input);
+            border-radius: var(--radius-full);
+            height: 8px;          /* slightly slimmer than before */
+            width: 100%;
+            overflow: hidden;
+            margin-top: 14px;
+        }
+
+        .score-bar {
+            border-radius: var(--radius-full);
+            height: 8px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shimmer sweep on score bar */
+        .score-bar::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.2);
+            animation: shimmer 2.2s infinite;
+        }
+
+        @keyframes shimmer {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ── Rank badge ──────────────────────────────────── */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 700;
+            margin-right: 14px;
+            flex-shrink: 0;
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .rank-badge.gold {
+            background: rgba(251,191,36,0.2);
+            color: #fbbf24;
+            border-color: rgba(251,191,36,0.5);
+            box-shadow: 0 4px 14px rgba(251,191,36,0.25);
+            font-size: 18px; /* medal emoji size */
+        }
+
+        .rank-badge.silver {
+            background: rgba(156,163,175,0.2);
+            color: #e5e7eb;
+            border-color: rgba(229,231,235,0.5);
+            box-shadow: 0 4px 14px rgba(156,163,175,0.2);
+            font-size: 18px;
+        }
+
+        .rank-badge.bronze {
+            background: rgba(234,88,12,0.18);
+            color: #fb923c;
+            border-color: rgba(251,146,60,0.5);
+            box-shadow: 0 4px 14px rgba(251,146,60,0.2);
+            font-size: 18px;
+        }
+
+        /* ── Candidate card ──────────────────────────────── */
+        .candidate-card {
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            /* Left border = tier color, set dynamically via inline style */
+            border-left-width: 4px;
+            border-left-style: solid;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* fade-in-up animation for card list */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Score breakdown pills ───────────────────────── */
+        .score-breakdown-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        /* Each category pill */
+        .score-breakdown-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .score-breakdown-item .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── Confidence badge ────────────────────────────── */
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .confidence-badge.high {
+            background: rgba(16,185,129,0.12);
+            color: var(--accent-green);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .confidence-badge.mid {
+            background: rgba(245,158,11,0.12);
+            color: var(--accent-orange);
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+
+        .confidence-badge.low {
+            background: rgba(100,116,139,0.12);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ── Reason chips ────────────────────────────────── */
+        .reason-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(59,130,246,0.10);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59,130,246,0.2);
+            margin: 2px 4px 0 0;
+        }
+
+        /* ── Decision chip ───────────────────────────────── */
+        .decision-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .decision-chip.proceed {
+            background: rgba(16,185,129,0.12);
+            color: #059669;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .decision-chip.reject {
+            background: rgba(239,68,68,0.12);
+            color: #dc2626;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        /* ── Scoring weights ─────────────────────────────── */
+        .weight-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .weight-label {
+            width: 100px;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .weight-input {
+            width: 80px !important;
+            text-align: center;
+            font-weight: 700;
+            border: 2px solid var(--border-color);
+            transition: border-color var(--transition-fast), background var(--transition-fast);
+            border-radius: var(--radius-sm);
+        }
+
+        .weight-input:focus { border-color: var(--accent-blue); }
+
+        /* Color feedback on weight inputs */
+        .weight-input.low  { color: #9a3412; background: #fff7ed; border-color: #fdba74; }
+        .weight-input.mid  { color: #1d4ed8; background: #eff6ff; border-color: #93c5fd; }
+        .weight-input.high { color: #0f172a; background: #dbeafe; border-color: #3b82f6; font-weight: 800; }
+
+        .weight-default {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 0;
+        }
+
+        /* Weight total pill */
+        .weight-total {
+            font-size: 15px;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .weight-total.valid {
+            background: rgba(16,185,129,0.12);
+            color: var(--accent-green);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .weight-total.invalid {
+            background: rgba(239,68,68,0.12);
+            color: var(--accent-red);
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        /* ── View controls ───────────────────────────────── */
+        .view-controls-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .threshold-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .threshold-grid label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .slider-wrap input[type="range"] {
+            width: 100%;
+            accent-color: #2563eb;
+        }
+
+        .slider-value {
+            display: inline-flex;
+            margin-top: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1e3a8a;
+            background: #dbeafe;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+
+        .slider-help {
+            margin-top: 5px;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .mini-note {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 10px;
+        }
+
+        .help-box {
+            margin-top: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            padding: 10px 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .help-box strong { color: var(--text-primary); }
+
+        /* ── No-jobs warning ─────────────────────────────── */
+        .no-jobs-warning {
+            border: 1px solid rgba(253,203,110,0.25);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--accent-orange);
+        }
+
+        .no-jobs-warning i  { font-size: 20px; }
+        .no-jobs-warning a  { color: var(--accent-primary); font-weight: 600; }
+
+        /* ── Inline errors ───────────────────────────────── */
+        .inline-error {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #b91c1c;
+            display: none;
+        }
+
+        /* Distribution bar rows */
+        .dist-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 34px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .dist-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: var(--bg-input);
+            overflow: hidden;
+        }
+
+        .dist-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+        }
+
+        /* AI summary text on candidate card */
+        .ai-summary {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-style: italic;
+            line-height: 1.55;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* Section title (used in controls section) */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i { color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+
+<div class="page-content">
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="header-icon"><i class='bx bx-bar-chart-alt-2'></i></div>
+        <div>
+            <h1>Candidate Rankings</h1>
+            <p>Step 3 of 5. Review fit score, confidence, and shortlist quality before comparison.</p>
+        </div>
+    </div>
+
+    <!-- Analytics / summary panel (shown after rankings load) -->
+    <div class="card" id="analyticsPanel" style="display:none;">
+        <h2><i class='bx bx-line-chart' style="color: var(--accent-primary); margin-right: 6px;"></i>Hiring Snapshot</h2>
+        <p class="view-controls-note">Green = interview-ready · Yellow = review further · Red = likely mismatch.</p>
+        <div class="analytics-grid" id="analyticsGrid"></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px;">
+            <div>
+                <div style="font-size:13px; font-weight:700; margin-bottom:8px; color: var(--text-secondary);">Fit Overview</div>
+                <div id="quartileGraph"></div>
+            </div>
+            <div>
+                <div style="font-size:13px; font-weight:700; margin-bottom:8px; color: var(--text-secondary);">Score Distribution</div>
+                <div id="distributionGraph"></div>
+            </div>
+        </div>
+        <div style="margin-top:12px;">
+            <div style="font-size:13px; font-weight:700; margin-bottom:8px; color: var(--text-secondary);">Suggested Shortlist</div>
+            <div id="shortlistBox" style="font-size:12px; color: var(--text-muted);"></div>
+        </div>
+    </div>
+
+    <!-- Job selector -->
+    <div class="card">
+        <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+            <div style="flex: 1; max-width: 360px;">
+                <label>Select Job</label>
+                <select id="jobSelect">
+                    <option value="">Loading jobs...</option>
+                </select>
+                <div id="jobInlineError" class="inline-error"></div>
+            </div>
+            <button onclick="loadRankings()"><i class='bx bx-refresh'></i> Review Rankings</button>
+        </div>
+        <div id="noJobsWarning" style="display: none; margin-top: 14px;" class="no-jobs-warning">
+            <i class='bx bx-info-circle'></i>
+            <span>No jobs found. <a href="/job-input">Create a job posting</a> first.</span>
+        </div>
+    </div>
+
+    <!-- View controls (sort, filter, export) -->
+    <div class="card" id="viewControls" style="display:none;">
+        <h2><i class='bx bx-filter-alt' style="color: var(--accent-primary); margin-right: 6px;"></i>Ranking Controls</h2>
+        <p class="view-controls-note">Adjust sorting and filters to match your interview capacity for this round.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div>
+                <label for="sortBy">Sort by</label>
+                <select id="sortBy" onchange="applyRankingsView()" style="min-width:210px;">
+                    <option value="total_desc">Highest Total Score</option>
+                    <option value="skills_desc">Highest Skills Score</option>
+                    <option value="experience_desc">Highest Experience Score</option>
+                    <option value="confidence_desc">Highest Confidence</option>
+                </select>
+            </div>
+            <div>
+                <label for="minScore">Minimum score</label>
+                <input id="minScore" type="number" min="0" max="100" value="0" oninput="applyRankingsView()" style="width:120px;">
+            </div>
+            <div>
+                <label for="topLimit">Show top</label>
+                <select id="topLimit" onchange="applyRankingsView()" style="width:130px;">
+                    <option value="0">All</option>
+                    <option value="5">Top 5</option>
+                    <option value="10">Top 10</option>
+                    <option value="20">Top 20</option>
+                </select>
+            </div>
+            <div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-secondary" onclick="exportRankingsCsv()">
+                    <i class='bx bx-download'></i> Export CSV
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="sendTopToComparison()">
+                    <i class='bx bx-git-compare'></i> Send Top to Compare
+                </button>
+            </div>
+        </div>
+
+        <div class="threshold-grid">
+            <div class="slider-wrap">
+                <label for="tRejectScore">Reject below score</label>
+                <input id="tRejectScore" type="range" min="20" max="75" value="55" oninput="saveDecisionThresholds()">
+                <span class="slider-value" id="lblRejectScore">55</span>
+                <div class="slider-help">
+                    Candidate is marked <strong>Reject</strong> if score falls below this value.
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-note">This score rule applies to Decision Support in Candidate Detail for this browser session.</div>
+
+        <div class="help-box">
+            <strong>Quick guide:</strong>
+            <strong>Proceed</strong> = score is at or above the reject threshold.
+            <strong>Reject</strong> = score is below it.
+            <br>
+            <strong>Confidence</strong> = how certain the AI is about match quality (higher = more reliable result).
+        </div>
+    </div>
+
+    <!-- Scoring weights -->
+    <div class="card" id="scoringPanel" style="display:none;">
+        <h2><i class='bx bx-slider-alt' style="color: var(--accent-primary); margin-right: 6px;"></i> Scoring Weights</h2>
+
+        <div class="weight-row">
+            <span class="weight-label">Skills</span>
+            <input class="weight-input" type="number" id="wSkills" value="40" min="0" max="100" oninput="updateWeightTotal()">
+            <span class="weight-default">default: 40</span>
+        </div>
+        <div class="weight-row">
+            <span class="weight-label">Experience</span>
+            <input class="weight-input" type="number" id="wExperience" value="30" min="0" max="100" oninput="updateWeightTotal()">
+            <span class="weight-default">default: 30</span>
+        </div>
+        <div class="weight-row">
+            <span class="weight-label">Education</span>
+            <input class="weight-input" type="number" id="wEducation" value="20" min="0" max="100" oninput="updateWeightTotal()">
+            <span class="weight-default">default: 20</span>
+        </div>
+        <div class="weight-row">
+            <span class="weight-label">Extras</span>
+            <input class="weight-input" type="number" id="wExtras" value="10" min="0" max="100" oninput="updateWeightTotal()">
+            <span class="weight-default">default: 10</span>
+        </div>
+
+        <div style="margin: 14px 0; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div class="weight-total valid" id="weightTotalBox">
+                <i class='bx bx-check-circle'></i> Total: <span id="weightTotal">100</span> / 100
+            </div>
+            <span id="weightError" class="error-msg" style="margin-top:0;"></span>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:center;">
+            <button onclick="scoreAll()" id="scoreBtn">
+                <i class='bx bx-brain'></i> Score All Candidates
+                <span class="spinner"></span>
+            </button>
+            <span id="scoreMsg" style="font-size:13px; color: var(--text-secondary);"></span>
+        </div>
+    </div>
+
+    <!-- Natural language search -->
+<!--    <div class="card" id="searchPanel" style="display:none;">-->
+<!--        <h2><i class='bx bx-search-alt' style="color: var(&#45;&#45;accent-secondary); margin-right: 6px;"></i> Smart Search</h2>-->
+<!--        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">-->
+<!--            <input type="text" id="searchQuery"-->
+<!--                   placeholder='e.g. "who has AWS and Docker experience?"'-->
+<!--                   style="flex:1; min-width:220px;">-->
+<!--            <button onclick="searchCandidates()"><i class='bx bx-search'></i> Search</button>-->
+<!--            <button onclick="clearSearch()" class="btn btn-secondary"><i class='bx bx-x'></i> Clear</button>-->
+<!--        </div>-->
+<!--        <div id="searchInlineError" class="inline-error"></div>-->
+<!--        <div id="searchResults" style="margin-top:14px;"></div>-->
+<!--    </div>-->
+
+    <!-- Rankings list (rendered by JS) -->
+    <div id="rankingsList"></div>
+
+</div>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/rankings.js"></script>
+</body>
+</html>
