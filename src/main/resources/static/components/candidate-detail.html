@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireIQ - Candidate Detail</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <script>
+        (function() {
+            const p = new URLSearchParams(window.location.search);
+            if (!p.get('candidateId') || !p.get('jobId')) {
+                window.location.replace('/rankings');
+            }
+        })();
+    </script>
+    <style>
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: color var(--transition-fast);
+        }
+        .back-link:hover { color: var(--accent-primary); }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .detail-header h1 { margin-bottom: 4px; }
+
+        .score-circle {
+            width: 90px; height: 90px;
+            border-radius: var(--radius-full);
+            background: var(--accent-primary);
+            color: white;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+        }
+        .score-circle .big  { font-size: 28px; font-weight: 800; line-height: 1; }
+        .score-circle .small { font-size: 11px; color: rgba(255,255,255,0.7); }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i { color: var(--accent-primary); font-size: 18px; }
+
+        .score-row { margin-bottom: 14px; }
+        .score-row-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        .score-row-header span:last-child { font-weight: 700; color: var(--text-primary); }
+        .score-row-bar {
+            background: var(--bg-input);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .score-row-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        .fill-skills     { background: #6366f1; }
+        .fill-experience { background: #0ea5e9; }
+        .fill-education  { background: #f59e0b; }
+        .fill-extras     { background: #ec4899; }
+
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .conf-high { background: rgba(85, 239, 196, 0.12); color: var(--accent-green); }
+        .conf-mid  { background: rgba(253, 203, 110, 0.12); color: var(--accent-orange); }
+        .conf-low  { background: rgba(255, 107, 107, 0.12); color: var(--accent-red); }
+
+        .ai-summary-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-primary);
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            margin: 3px;
+            font-weight: 600;
+        }
+        .matched-tag { background: rgba(85, 239, 196, 0.12); color: var(--accent-green); }
+        .missing-tag { background: rgba(255, 107, 107, 0.12); color: var(--accent-red); }
+
+        .checklist-item {
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .fully_met     { background: rgba(85, 239, 196, 0.08); border-left: 4px solid var(--accent-green); }
+        .partially_met { background: rgba(253, 203, 110, 0.08); border-left: 4px solid var(--accent-orange); }
+        .not_met       { background: rgba(255, 107, 107, 0.08); border-left: 4px solid var(--accent-red); }
+        .checklist-item strong { color: var(--text-primary); }
+        .checklist-item .cl-status {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            margin-left: 8px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .fully_met .cl-status     { background: rgba(85, 239, 196, 0.15); color: var(--accent-green); }
+        .partially_met .cl-status { background: rgba(253, 203, 110, 0.15); color: var(--accent-orange); }
+        .not_met .cl-status       { background: rgba(255, 107, 107, 0.15); color: var(--accent-red); }
+        .checklist-evidence {
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+        }
+
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+        }
+
+        .benchmark-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            padding: 12px;
+        }
+        .benchmark-item .k {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .benchmark-item .v {
+            margin-top: 4px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .decision-box {
+            border-left: 4px solid var(--accent-primary);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+        }
+        .decision-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .decision-proceed { background: rgba(85, 239, 196, 0.14); color: var(--accent-green); }
+        .decision-hold    { background: rgba(253, 203, 110, 0.16); color: #a16207; }
+        .decision-reject  { background: rgba(255, 107, 107, 0.16); color: var(--accent-red); }
+
+        .next-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        /* ── Radar chart card ───────────────────── */
+        .radar-legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .radar-legend-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .radar-caption {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-content">
+
+    <a id="backToRankings" href="/rankings" class="back-link">
+        <i class='bx bx-arrow-back'></i> Back to Rankings
+    </a>
+
+    <div id="content">
+        <div class="loading-state">
+            <i class='bx bx-loader-alt bx-spin' style="font-size: 28px; color: var(--accent-primary);"></i>
+            <p style="margin-top: 12px;">Loading candidate details...</p>
+        </div>
+    </div>
+
+</div>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/candidate-detail.js"></script>
+</body>
+</html>
